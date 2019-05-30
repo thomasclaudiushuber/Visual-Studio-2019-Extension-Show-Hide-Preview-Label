@@ -76,6 +76,12 @@ namespace VSIXShowHidePreviewLabel
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
+            // Wait until the MainWindow and the InfoBadgeButton is loaded
+            while (GetInfoBadgeButton() == null)
+            {
+                await Task.Delay(1000);
+            }
+
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             Instance = new ShowPreviewLabelCommand(package, commandService);
         }
